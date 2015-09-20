@@ -44,7 +44,7 @@ exports.presses = function() {
   document.addEventListener('keypress', function(ev) {
     presses(ev.keyCode);
   }, false);
-  
+
   return presses;
 };
 
@@ -64,6 +64,7 @@ exports.key = function(key) {
 };
 
 exports.arrows = function(elem) {
+  console.log("BLARG");
   var l = stream(false);
   var r = stream(false);
   var u = stream(false);
@@ -92,7 +93,36 @@ exports.arrows = function(elem) {
   }));
 };
 
-function eqCoords(a, b) {
+exports.wasd = function(elem) {
+  var w = stream(false); // 88
+  var a = stream(false); // 65
+  var s = stream(false); // 83
+  var d = stream(false); // 68
+
+  document.addEventListener('keydown', function(ev) {
+    if      (ev.keyCode === 88) w(true);
+    else if (ev.keyCode === 65) a(true);
+    else if (ev.keyCode === 83) s(true);
+    else if (ev.keyCode === 68) d(true);
+  }, false);
+
+  document.addEventListener('keyup', function(ev) {
+    if      (ev.keyCode === 88) w(false);
+    else if (ev.keyCode === 65) a(false);
+    else if (ev.keyCode === 83) s(false);
+    else if (ev.keyCode === 68) d(false);
+  }, false);
+
+
+  return dropRepeatsWith(eqCoords, stream([w, a, s, d], function() {
+    return {
+      x: a() ? -1 : d() ? 1 : 0,
+      y: w() ? -1 : s() ? 1 : 0
+    };
+  }));
+};
+
+functioneqCoords(a, b) {
   return a && b && a.x === b.x && a.y === b.y;
 };
 
